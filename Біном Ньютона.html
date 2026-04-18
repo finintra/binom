@@ -1,0 +1,849 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="UTF-8">
+<title>Біном Ньютона — для першокласника</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Baloo+2:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+<script src="cat.js"></script>
+<script src="deck-stage.js"></script>
+</head>
+<body>
+
+<deck-stage width="1920" height="1080">
+
+  <!-- ====================================================================
+       Слайд 1 — Title
+       ==================================================================== -->
+  <section data-label="Title" class="title-slide">
+    <div style="position: absolute; inset: 0; display: grid; place-items: center;">
+      <div style="text-align: center; display: flex; flex-direction: column; align-items: center; gap: 40px;">
+        <div class="eyebrow" style="background: var(--ink); font-size: 32px;">🧸 Математика для малюків</div>
+        <h1 style="font-size: 196px;">Біном<br>Ньютона</h1>
+        <p class="huge" style="font-weight: 500;">Магія кубиків, які вміють множитися</p>
+
+        <!-- Floating cubes -->
+        <div style="display: flex; gap: 24px; margin-top: 20px;">
+          <span class="cube md a floaty" style="animation-delay: 0s;"><span class="stud left"></span><span class="stud right"></span>a</span>
+          <span class="cube md sun floaty" style="animation-delay: 0.3s; font-size: 72px;"><span class="stud left"></span><span class="stud right"></span>+</span>
+          <span class="cube md b floaty" style="animation-delay: 0.6s;"><span class="stud left"></span><span class="stud right"></span>b</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Cat peeking bottom-right -->
+    <div style="position: absolute; bottom: 40px; right: 60px; z-index: 2;">
+      <div id="cat-title"></div>
+    </div>
+
+    <!-- Confetti -->
+    <span class="confetti" style="top: 80px; left: 140px; background: var(--coral); animation: float 3s infinite;"></span>
+    <span class="confetti" style="top: 180px; right: 200px; background: var(--mint); animation: float 2.5s infinite 0.5s;"></span>
+    <span class="confetti" style="bottom: 220px; left: 120px; background: var(--plum); animation: float 2.8s infinite 1s; width: 30px; height: 30px;"></span>
+    <span class="confetti" style="top: 300px; left: 90px; background: var(--sky); animation: float 3.2s infinite 0.8s; width: 18px; height: 18px;"></span>
+  </section>
+
+  <!-- ====================================================================
+       Слайд 2 — Привіт, я котик
+       ==================================================================== -->
+  <section data-label="Hello cat">
+    <div style="display: grid; grid-template-columns: 1fr 1fr; align-items: center; gap: 60px; height: 100%;">
+      <div style="display: flex; justify-content: center;">
+        <div id="cat-hello" class="wiggly"></div>
+      </div>
+      <div class="stack" style="gap: 40px;">
+        <div class="eyebrow" style="background: var(--coral); align-self: flex-start;">Слайд 1 з 16</div>
+        <h2>Привіт! <br>Я — котик Біник 🐾</h2>
+        <div class="cat-speech" style="margin-left: 30px;">
+          Сьогодні я покажу тобі одну дуже-дуже цікаву математичну штуку.
+          Вона називається смішним словом — <b>біно́м</b>.
+          Але ти побачиш: це просто гра з кубиками!
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ====================================================================
+       Слайд 3 — А що таке "біном"?
+       ==================================================================== -->
+  <section data-label="What is binom">
+    <div class="stack" style="gap: 50px;">
+      <div class="eyebrow" style="background: var(--plum); align-self: flex-start;">Нове слово</div>
+      <h2>Що таке <span class="scribble">біном</span>?</h2>
+    </div>
+
+    <div style="position: absolute; bottom: 140px; left: 88px; right: 88px;">
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center;">
+        <div class="bubble">
+          <b>«Бі»</b> — означає <b>два</b>.<br>
+          Як у слові <b>бі</b>цикл (два колеса)<br>
+          або <b>бі</b>нокль (два віконця).
+        </div>
+        <div class="bubble coral">
+          <b>Біном</b> — це коли<br>ми склали докупи<br>
+          <b>два числа або дві літери</b>:<br>
+          наприклад, <b>a + b</b>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ====================================================================
+       Слайд 4 — Кубики a і b
+       ==================================================================== -->
+  <section data-label="Meet a and b" data-anim>
+    <div class="stack" style="gap: 40px;">
+      <div class="eyebrow" style="background: var(--sky); align-self: flex-start;">Знайомство</div>
+      <h2>Познайомся з <br>двома кубиками</h2>
+    </div>
+
+    <div style="position: absolute; bottom: 160px; left: 0; right: 0; display: flex; justify-content: center; gap: 140px;">
+      <div class="stack" style="align-items: center; gap: 28px;">
+        <span class="cube xl a step shown floaty"><span class="stud left"></span><span class="stud right"></span>a</span>
+        <p class="big"><b>Червоний кубик «а»</b></p>
+        <p style="text-align: center; max-width: 400px;">Це, наприклад, кількість <b>яблук</b></p>
+      </div>
+      <div class="stack" style="align-items: center; gap: 28px;">
+        <span class="cube xl b step shown floaty" style="animation-delay: 0.4s;"><span class="stud left"></span><span class="stud right"></span>b</span>
+        <p class="big"><b>Синій кубик «b»</b></p>
+        <p style="text-align: center; max-width: 400px;">А це кількість <b>груш</b></p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ====================================================================
+       Слайд 5 — a + b
+       ==================================================================== -->
+  <section data-label="a plus b" data-anim>
+    <div class="stack" style="gap: 40px;">
+      <div class="eyebrow" style="background: var(--mint); align-self: flex-start;">Додаємо</div>
+      <h2>Складемо їх разом</h2>
+    </div>
+
+    <div style="position: absolute; top: 50%; left: 0; right: 0; transform: translateY(-40%);">
+      <div style="display: flex; justify-content: center; align-items: center; gap: 32px;">
+        <span class="cube xl a"><span class="stud left"></span><span class="stud right"></span>a</span>
+        <span style="font-size: 180px; font-weight: 700; color: var(--ink);">+</span>
+        <span class="cube xl b"><span class="stud left"></span><span class="stud right"></span>b</span>
+        <span style="font-size: 180px; font-weight: 700; color: var(--ink);">=</span>
+        <div class="step" data-step="1" style="display: flex; align-items: center; gap: 0;">
+          <span class="cube xl a" style="border-radius: 18px 0 0 18px; border-right: 0;">a</span>
+          <span class="cube xl b" style="border-radius: 0 18px 18px 0;">b</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="cat-box step" data-step="2" style="position: absolute; bottom: 80px; left: 88px;">
+      <div id="cat-ab" style="margin-bottom: -6px;"></div>
+      <div class="cat-speech">
+        Ось і <b>наш біном</b>: <b>a + b</b>. <br>
+        Просто два кубики разом. Легко ж!
+      </div>
+    </div>
+
+    <div class="click-hint"><span class="dot"></span>Клікни, щоб побачити далі</div>
+    <div class="slide-num">05</div>
+  </section>
+
+  <!-- ====================================================================
+       Слайд 6 — Section: а що, як помножити?
+       ==================================================================== -->
+  <section data-label="Section multiply" class="section-slide">
+    <div class="center-col">
+      <div class="eyebrow" style="background: var(--sun); color: var(--ink);">Частина 2</div>
+      <h2 style="font-size: 148px; text-align: center;">А що буде,<br>якщо<br><span style="background: var(--sun); color: var(--ink); padding: 8px 32px; border-radius: 24px;">помножити</span><br>біном сам на себе?</h2>
+      <p class="big" style="opacity: 0.85;">Тобто взяти (a + b) × (a + b)</p>
+    </div>
+  </section>
+
+  <!-- ====================================================================
+       Слайд 7 — (a+b)² як квадрат
+       ==================================================================== -->
+  <section data-label="a+b squared intro" data-anim style="display: grid; grid-template-columns: 1fr 1fr; gap: 40px; align-items: center; padding: 64px 80px;">
+    <div class="stack" style="gap: 28px;">
+      <div class="eyebrow" style="background: var(--coral); align-self: flex-start;">Квадрат біному</div>
+      <h2 style="font-size: 78px;">Уяви квадратну коробку</h2>
+      <p class="big">Одна сторона <b>a + b</b>, <br>і друга сторона теж <b>a + b</b>.</p>
+      <p style="font-size: 30px;">Всередині — <b>4 шматочки</b>. <br>Клікни, щоб їх розкласти 👉</p>
+    </div>
+
+    <div style="display: flex; justify-content: center; align-items: center;">
+      <div>
+        <div style="display: flex; margin-left: 68px; margin-bottom: 12px;">
+          <div style="width: 320px; text-align: center; font-size: 40px; font-weight: 700; color: var(--coral-deep);">a</div>
+          <div style="width: 220px; text-align: center; font-size: 40px; font-weight: 700; color: var(--sky-deep); margin-left: 14px;">b</div>
+        </div>
+        <div style="display: flex; align-items: flex-start; gap: 14px;">
+          <div style="display: flex; flex-direction: column;">
+            <div style="height: 320px; display: flex; align-items: center; font-size: 40px; font-weight: 700; color: var(--coral-deep);">a</div>
+            <div style="height: 220px; display: flex; align-items: center; font-size: 40px; font-weight: 700; color: var(--sky-deep);">b</div>
+          </div>
+          <div class="grid-box" style="grid-template-columns: 320px 220px; grid-template-rows: 320px 220px; background: white;">
+            <div class="cell step" style="background: var(--coral);" data-step="1"><span class="label">a · a = a²</span><span class="tag" style="font-size: 26px;">a²</span></div>
+            <div class="cell step" style="background: var(--plum);" data-step="2"><span class="label">a · b</span><span class="tag" style="font-size: 26px;">ab</span></div>
+            <div class="cell step" style="background: var(--plum);" data-step="3"><span class="label">a · b</span><span class="tag" style="font-size: 26px;">ab</span></div>
+            <div class="cell step" style="background: var(--sky);" data-step="4"><span class="label">b · b = b²</span><span class="tag" style="font-size: 26px;">b²</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="click-hint" style="font-size: 26px;"><span class="dot"></span>Клікни — шматочки з'являться по одному</div>
+    <div class="slide-num" style="font-size: 26px;">07</div>
+  </section>
+
+  <!-- ====================================================================
+       Слайд 8 — Складаємо шматочки
+       ==================================================================== -->
+  <section data-label="a+b squared pieces" data-anim>
+    <div class="stack" style="gap: 30px;">
+      <div class="eyebrow" style="background: var(--coral); align-self: flex-start;">Рахуємо шматочки</div>
+      <h2>Скільки у нас всього?</h2>
+    </div>
+
+    <div style="position: absolute; top: 340px; left: 0; right: 0; padding: 0 100px;">
+      <div style="display: flex; justify-content: space-around; align-items: center; gap: 40px; flex-wrap: wrap;">
+        <div class="stack step" data-step="1" style="align-items: center; gap: 20px;">
+          <span class="cube xl aa"><span class="stud left"></span><span class="stud right"></span>a²</span>
+          <p class="big" style="text-align: center;"><b>1 великий<br>червоний</b></p>
+        </div>
+        <div class="stack step" data-step="2" style="align-items: center; gap: 20px;">
+          <div style="display: flex; gap: 16px;">
+            <span class="cube lg ab"><span class="stud left"></span><span class="stud right"></span>ab</span>
+            <span class="cube lg ab"><span class="stud left"></span><span class="stud right"></span>ab</span>
+          </div>
+          <p class="big" style="text-align: center;"><b>2 фіолетові<br>(a · b)</b></p>
+        </div>
+        <div class="stack step" data-step="3" style="align-items: center; gap: 20px;">
+          <span class="cube xl bb"><span class="stud left"></span><span class="stud right"></span>b²</span>
+          <p class="big" style="text-align: center;"><b>1 великий<br>синій</b></p>
+        </div>
+      </div>
+    </div>
+
+    <div class="step" data-step="4" style="position: absolute; bottom: 90px; left: 0; right: 0; text-align: center;">
+      <div class="eq" style="justify-content: center;">
+        <span>(a + b)<sup>2</sup></span>
+        <span class="op">=</span>
+        <span class="piece coral">a<sup>2</sup></span>
+        <span class="op">+</span>
+        <span class="piece plum">2ab</span>
+        <span class="op">+</span>
+        <span class="piece sky">b<sup>2</sup></span>
+      </div>
+    </div>
+
+    <div class="click-hint"><span class="dot"></span>Клікай, щоб продовжити</div>
+    <div class="slide-num">08</div>
+  </section>
+
+  <!-- ====================================================================
+       Слайд 9 — Перевіримо на числах! 2+3
+       ==================================================================== -->
+  <section data-label="Check with numbers" data-anim>
+    <div class="stack" style="gap: 30px;">
+      <div class="eyebrow" style="background: var(--mint); align-self: flex-start;">Перевірка</div>
+      <h2>А якщо <br>a = 2, b = 3?</h2>
+    </div>
+
+    <div style="position: absolute; top: 380px; left: 88px; right: 88px;">
+      <div class="stack" style="gap: 36px;">
+
+        <div class="step" data-step="1">
+          <div class="eq" style="font-size: 72px;">
+            <span>(2 + 3)<sup>2</sup></span>
+            <span class="op">=</span>
+            <span>5<sup>2</sup></span>
+            <span class="op">=</span>
+            <span class="piece sun">25</span>
+          </div>
+        </div>
+
+        <div class="step" data-step="2">
+          <div class="eq" style="font-size: 72px;">
+            <span>2<sup>2</sup> + 2·2·3 + 3<sup>2</sup></span>
+            <span class="op">=</span>
+            <span>4 + 12 + 9</span>
+            <span class="op">=</span>
+            <span class="piece mint">25</span>
+          </div>
+        </div>
+
+        <div class="step" data-step="3" style="display: flex; align-items: center; gap: 24px; margin-top: 20px;">
+          <div id="cat-check" style="flex: 0 0 auto;"></div>
+          <div class="cat-speech">
+            <b>Однаково!</b> 🎉 І тут 25, і там 25. <br>
+            Магія працює!
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="click-hint"><span class="dot"></span>Клікай, щоб побачити обидва способи</div>
+    <div class="slide-num">09</div>
+  </section>
+
+  <!-- ====================================================================
+       Слайд 10 — (a+b)³
+       ==================================================================== -->
+  <section data-label="Cube intro" class="section-slide" style="background: var(--plum) !important;">
+    <div class="center-col">
+      <div class="eyebrow" style="background: var(--sun); color: var(--ink);">Йдемо далі</div>
+      <h2 style="font-size: 164px; text-align: center;">А якщо <br><span style="background: var(--sun); color: var(--ink); padding: 8px 36px; border-radius: 24px;">три рази</span>?</h2>
+      <p class="huge" style="opacity: 0.9;">(a + b) · (a + b) · (a + b) = (a + b)<sup>3</sup></p>
+    </div>
+  </section>
+
+  <!-- ====================================================================
+       Слайд 11 — Куб кубиків
+       ==================================================================== -->
+  <section data-label="Cube pieces" data-anim style="display: flex; flex-direction: column; padding: 50px 80px 40px;">
+    <div class="stack" style="gap: 14px; flex: 0 0 auto;">
+      <div class="eyebrow" style="background: var(--plum); align-self: flex-start;">Куб біному</div>
+      <h2 style="font-size: 74px;">Тепер у нас буде велика коробка-куб</h2>
+      <p style="font-size: 30px;">Три сторони, і кожна <b>a + b</b>. Всередині — 8 маленьких кубиків!</p>
+    </div>
+
+    <div style="flex: 1 1 auto; display: flex; align-items: center; padding: 0; margin-top: 20px;">
+      <div style="display: flex; justify-content: space-around; align-items: flex-end; gap: 20px;">
+        <div class="stack step shown" data-step="1" style="align-items: center; gap: 14px; opacity: 1;">
+          <span class="cube lg aa"><span class="stud left"></span><span class="stud right"></span>a³</span>
+          <p style="text-align: center;"><b>1×</b> a³</p>
+        </div>
+        <span style="font-size: 80px; color: var(--ink-soft); align-self: center; margin-bottom: 40px;">+</span>
+        <div class="stack step shown" data-step="2" style="align-items: center; gap: 14px; opacity: 1;">
+          <div style="display: flex; gap: 10px;">
+            <span class="cube md ab" style="font-size: 46px;"><span class="stud left"></span><span class="stud right"></span>a²b</span>
+            <span class="cube md ab" style="font-size: 46px;"><span class="stud left"></span><span class="stud right"></span>a²b</span>
+            <span class="cube md ab" style="font-size: 46px;"><span class="stud left"></span><span class="stud right"></span>a²b</span>
+          </div>
+          <p style="text-align: center;"><b>3×</b> a²b</p>
+        </div>
+        <span style="font-size: 80px; color: var(--ink-soft); align-self: center; margin-bottom: 40px;">+</span>
+        <div class="stack step shown" data-step="3" style="align-items: center; gap: 14px; opacity: 1;">
+          <div style="display: flex; gap: 10px;">
+            <span class="cube md ab" style="font-size: 46px; background: var(--pink); color: var(--ink);"><span class="stud left"></span><span class="stud right"></span>ab²</span>
+            <span class="cube md ab" style="font-size: 46px; background: var(--pink); color: var(--ink);"><span class="stud left"></span><span class="stud right"></span>ab²</span>
+            <span class="cube md ab" style="font-size: 46px; background: var(--pink); color: var(--ink);"><span class="stud left"></span><span class="stud right"></span>ab²</span>
+          </div>
+          <p style="text-align: center;"><b>3×</b> ab²</p>
+        </div>
+        <span style="font-size: 80px; color: var(--ink-soft); align-self: center; margin-bottom: 40px;">+</span>
+        <div class="stack step shown" data-step="4" style="align-items: center; gap: 14px; opacity: 1;">
+          <span class="cube lg bb"><span class="stud left"></span><span class="stud right"></span>b³</span>
+          <p style="text-align: center;"><b>1×</b> b³</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="step shown" data-step="5" style="flex: 0 0 auto; text-align: center; margin-top: 10px; opacity: 1;">
+      <div class="eq" style="justify-content: center; font-size: 66px;">
+        <span>(a + b)<sup>3</sup></span>
+        <span class="op">=</span>
+        <span class="piece coral">a<sup>3</sup></span>
+        <span class="op">+</span>
+        <span class="piece plum">3a<sup>2</sup>b</span>
+        <span class="op">+</span>
+        <span class="piece" style="background: var(--pink);">3ab<sup>2</sup></span>
+        <span class="op">+</span>
+        <span class="piece sky">b<sup>3</sup></span>
+      </div>
+    </div>
+
+    <div class="click-hint"><span class="dot"></span>Клікай по черзі</div>
+    <div class="slide-num">11</div>
+  </section>
+
+  <!-- ====================================================================
+       Слайд 12 — Бачиш закономірність?
+       ==================================================================== -->
+  <section data-label="Pattern" style="display: flex; flex-direction: column; padding: 64px 88px;">
+    <div class="stack" style="gap: 20px; flex: 0 0 auto;">
+      <div class="eyebrow" style="background: var(--sun); color: var(--ink); align-self: flex-start;">Помічаєш?</div>
+      <h2 style="font-size: 88px;">Подивись на чарівні числа!</h2>
+    </div>
+
+    <div style="flex: 1 1 auto; display: flex; align-items: center; justify-content: center;">
+      <div class="stack" style="align-items: stretch; gap: 40px;">
+
+        <div style="display: flex; align-items: center; gap: 36px;">
+          <div style="width: 340px; font-size: 52px; font-weight: 700; text-align: right; color: var(--ink);">(a + b)<sup>1</sup> =</div>
+          <div style="display: flex; gap: 16px;">
+            <span class="pascal-cell c1" style="width: 96px; height: 96px; font-size: 44px;">1</span>
+            <span class="pascal-cell c1" style="width: 96px; height: 96px; font-size: 44px;">1</span>
+          </div>
+        </div>
+
+        <div style="display: flex; align-items: center; gap: 36px;">
+          <div style="width: 340px; font-size: 52px; font-weight: 700; text-align: right; color: var(--ink);">(a + b)<sup>2</sup> =</div>
+          <div style="display: flex; gap: 16px;">
+            <span class="pascal-cell c2" style="width: 96px; height: 96px; font-size: 44px;">1</span>
+            <span class="pascal-cell c2" style="width: 96px; height: 96px; font-size: 44px;">2</span>
+            <span class="pascal-cell c2" style="width: 96px; height: 96px; font-size: 44px;">1</span>
+          </div>
+        </div>
+
+        <div style="display: flex; align-items: center; gap: 36px;">
+          <div style="width: 340px; font-size: 52px; font-weight: 700; text-align: right; color: var(--ink);">(a + b)<sup>3</sup> =</div>
+          <div style="display: flex; gap: 16px;">
+            <span class="pascal-cell c3" style="width: 96px; height: 96px; font-size: 44px;">1</span>
+            <span class="pascal-cell c3" style="width: 96px; height: 96px; font-size: 44px;">3</span>
+            <span class="pascal-cell c3" style="width: 96px; height: 96px; font-size: 44px;">3</span>
+            <span class="pascal-cell c3" style="width: 96px; height: 96px; font-size: 44px;">1</span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="slide-num">12</div>
+  </section>
+
+  <!-- ====================================================================
+       Слайд 13 — Трикутник Паскаля
+       ==================================================================== -->
+  <section data-label="Pascal triangle" data-anim style="display: flex; flex-direction: column; padding: 50px 88px 80px;">
+    <div class="stack" style="gap: 14px; flex: 0 0 auto;">
+      <div class="eyebrow" style="background: var(--coral); align-self: flex-start;">Чарівний трикутник</div>
+      <h2 style="font-size: 84px;">Трикутник Паскаля</h2>
+      <p style="font-size: 30px; max-width: 1100px;">Кожне число = <b>сума двох сусідів зверху</b>. А по краях завжди <b>1</b>.</p>
+    </div>
+
+    <div class="pascal" style="flex: 1 1 auto; justify-content: center; margin-top: 20px;">
+      <div class="pascal-row step shown" data-step="0">
+        <span class="pascal-cell c0">1</span>
+      </div>
+      <div class="pascal-row step shown" data-step="1">
+        <span class="pascal-cell c1">1</span>
+        <span class="pascal-cell c1">1</span>
+      </div>
+      <div class="pascal-row step" data-step="2">
+        <span class="pascal-cell c2">1</span>
+        <span class="pascal-cell c2">2</span>
+        <span class="pascal-cell c2">1</span>
+      </div>
+      <div class="pascal-row step" data-step="3">
+        <span class="pascal-cell c3">1</span>
+        <span class="pascal-cell c3">3</span>
+        <span class="pascal-cell c3">3</span>
+        <span class="pascal-cell c3">1</span>
+      </div>
+      <div class="pascal-row step" data-step="4">
+        <span class="pascal-cell c4">1</span>
+        <span class="pascal-cell c4">4</span>
+        <span class="pascal-cell c4">6</span>
+        <span class="pascal-cell c4">4</span>
+        <span class="pascal-cell c4">1</span>
+      </div>
+      <div class="pascal-row step" data-step="5">
+        <span class="pascal-cell c5">1</span>
+        <span class="pascal-cell c5">5</span>
+        <span class="pascal-cell c5">10</span>
+        <span class="pascal-cell c5">10</span>
+        <span class="pascal-cell c5">5</span>
+        <span class="pascal-cell c5">1</span>
+      </div>
+    </div>
+
+    <div class="click-hint"><span class="dot"></span>Клікай — трикутник росте</div>
+    <div class="slide-num">13</div>
+  </section>
+
+  <!-- ====================================================================
+       Слайд 14 — Навіщо це?
+       ==================================================================== -->
+  <section data-label="Why">
+    <div class="stack" style="gap: 30px;">
+      <div class="eyebrow" style="background: var(--mint); align-self: flex-start;">Навіщо</div>
+      <h2>А <span class="scribble">навіщо</span> це все?</h2>
+    </div>
+
+    <div style="position: absolute; top: 360px; left: 88px; right: 88px;">
+      <ul class="checklist">
+        <li>
+          <span class="mark" style="background: var(--coral);">1</span>
+          <span><b>Щоб швидко</b> рахувати великі числа в голові.
+          Наприклад, 11 × 11, або 21 × 21 — без калькулятора!</span>
+        </li>
+        <li>
+          <span class="mark" style="background: var(--sky);">2</span>
+          <span><b>Щоб будувати</b> коробки, будинки, фігури —
+          інженерам треба знати, скільки чого.</span>
+        </li>
+        <li>
+          <span class="mark" style="background: var(--plum);">3</span>
+          <span><b>Щоб вгадувати</b> — наприклад, яка ймовірність,
+          що з 3 киданнях монетки три рази випаде орел.</span>
+        </li>
+        <li>
+          <span class="mark" style="background: var(--sun); color: var(--ink);">4</span>
+          <span><b>Щоб побачити красу:</b> математика — це головоломка,
+          і коли знаходиш відповідь, усередині радісно.</span>
+        </li>
+      </ul>
+    </div>
+
+    <div class="slide-num">14</div>
+  </section>
+
+  <!-- ====================================================================
+       Слайд 15 — Твоя черга! (вправа)
+       ==================================================================== -->
+  <section data-label="Your turn" data-anim>
+    <div class="stack" style="gap: 24px;">
+      <div class="eyebrow" style="background: var(--coral); align-self: flex-start;">Спробуй сам</div>
+      <h2>А тепер ти!</h2>
+      <p class="big">Знайди, чому дорівнює <b>(a + b)<sup>4</sup></b> <br>за допомогою трикутника Паскаля 👇</p>
+    </div>
+
+    <div style="position: absolute; top: 440px; left: 0; right: 0;">
+      <div style="display: flex; justify-content: center;">
+        <div class="pascal-row" style="gap: 24px;">
+          <span class="pascal-cell c4" style="width: 110px; height: 110px; font-size: 52px;">1</span>
+          <span class="pascal-cell c4" style="width: 110px; height: 110px; font-size: 52px;">4</span>
+          <span class="pascal-cell c4" style="width: 110px; height: 110px; font-size: 52px;">6</span>
+          <span class="pascal-cell c4" style="width: 110px; height: 110px; font-size: 52px;">4</span>
+          <span class="pascal-cell c4" style="width: 110px; height: 110px; font-size: 52px;">1</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="step" data-step="1" style="position: absolute; bottom: 140px; left: 0; right: 0; text-align: center;">
+      <div class="eq" style="justify-content: center; font-size: 64px;">
+        <span>(a + b)<sup>4</sup></span>
+        <span class="op">=</span>
+        <span class="piece coral">a<sup>4</sup></span>
+        <span class="op">+</span>
+        <span class="piece plum">4a<sup>3</sup>b</span>
+        <span class="op">+</span>
+        <span class="piece sun">6a<sup>2</sup>b<sup>2</sup></span>
+        <span class="op">+</span>
+        <span class="piece" style="background: var(--pink);">4ab<sup>3</sup></span>
+        <span class="op">+</span>
+        <span class="piece sky">b<sup>4</sup></span>
+      </div>
+    </div>
+
+    <div class="click-hint"><span class="dot"></span>Клікни — дізнайся відповідь</div>
+    <div class="slide-num">15</div>
+  </section>
+
+  <!-- ====================================================================
+       Слайд 15.5 — ІНТЕРАКТИВНА ГРА
+       ==================================================================== -->
+  <section data-label="Game" style="padding: 50px 88px 70px;">
+    <div class="stack" style="gap: 16px;">
+      <div class="eyebrow" style="background: var(--coral); align-self: flex-start;">Гра</div>
+      <h2 id="game-title" style="font-size: 72px;">Яка відповідь правильна?</h2>
+      <p id="game-question" style="font-size: 40px; font-weight: 600;">Чому дорівнює <span style="color: var(--coral-deep);">(a + b)<sup>2</sup></span>?</p>
+    </div>
+
+    <div id="game-options" style="display: flex; flex-direction: column; gap: 24px; align-items: center; margin-top: 36px;">
+      <!-- options rendered by JS -->
+    </div>
+
+    <div id="game-feedback" style="position: absolute; bottom: 90px; left: 88px; right: 88px; text-align: center; min-height: 100px;">
+      <!-- feedback rendered by JS -->
+    </div>
+
+    <div class="slide-num">16</div>
+  </section>
+
+  <!-- ====================================================================
+       Слайд 16 — Цікавий факт про Ньютона
+       ==================================================================== -->
+  <section data-label="Newton fact" class="finale-slide">
+    <div style="display: grid; grid-template-columns: 1fr 1.3fr; gap: 60px; align-items: center; height: 100%;">
+
+      <div style="display: flex; justify-content: center; align-items: center;">
+        <div style="position: relative;">
+          <!-- Apple -->
+          <div style="width: 280px; height: 280px; background: #e84545; border-radius: 50% 50% 48% 52% / 55% 55% 45% 45%; border: 6px solid var(--ink); box-shadow: var(--shadow-hard-lg); position: relative;" class="floaty">
+            <!-- Stem -->
+            <div style="position: absolute; top: -30px; left: 50%; transform: translateX(-50%); width: 16px; height: 40px; background: #6b3e2e; border-radius: 6px; border: 4px solid var(--ink);"></div>
+            <!-- Leaf -->
+            <div style="position: absolute; top: -8px; left: 55%; width: 60px; height: 30px; background: var(--mint); border: 4px solid var(--ink); border-radius: 0 100% 0 100%; transform: rotate(20deg);"></div>
+            <!-- Highlight -->
+            <div style="position: absolute; top: 50px; left: 60px; width: 44px; height: 44px; background: rgba(255,255,255,0.35); border-radius: 50%;"></div>
+            <!-- Number on apple -->
+            <div style="position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font-family: 'Fredoka'; font-weight: 700; font-size: 100px; color: white; text-shadow: 0 3px 0 rgba(0,0,0,0.3);">🍎</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="stack" style="gap: 32px;">
+        <div class="eyebrow" style="background: var(--sun); color: var(--ink); align-self: flex-start;">Цікавий факт</div>
+        <h2 style="font-size: 88px;">А знаєш що?</h2>
+        <div class="cat-speech" style="max-width: 900px;">
+          <p style="font-size: 34px; margin-bottom: 16px;">
+            <b>Ісаак Ньютон</b> — це англійський вчений, який жив <b>понад 300 років тому</b>.
+          </p>
+          <p style="font-size: 34px; margin-bottom: 16px;">
+            Він придумав <b>цю формулу</b> ще коли був молодим студентом, приблизно
+            <b>у 22 роки</b>! 🧠✨
+          </p>
+          <p style="font-size: 34px;">
+            А ще легенда каже, що він <b>сидів під яблунею</b>, яблуко впало йому на голову,
+            і так він почав думати про тяжіння. Біном Ньютона — одна з його маленьких суперсил
+            для розв'язання задач 🦸
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <div class="slide-num" style="color: rgba(255,255,255,0.7);">17</div>
+  </section>
+
+  <!-- ====================================================================
+       Слайд 17 — Дякую!
+       ==================================================================== -->
+  <section data-label="Thank you" class="title-slide" style="background: linear-gradient(180deg, var(--mint) 0%, var(--sky) 100%) !important;">
+    <div style="position: absolute; inset: 0; display: grid; place-items: center;">
+      <div style="text-align: center; display: flex; flex-direction: column; align-items: center; gap: 36px;">
+        <div id="cat-bye" class="wiggly" style="margin-bottom: 10px;"></div>
+        <h1 style="font-size: 200px; color: white; text-shadow: 0 6px 0 rgba(43,36,64,0.3);">Дякую!</h1>
+        <p class="huge" style="color: white; text-shadow: 0 3px 0 rgba(43,36,64,0.25);">Тепер ти знаєш біном Ньютона 🎉</p>
+
+        <div style="display: flex; gap: 20px; margin-top: 20px;">
+          <span class="cube md a floaty"><span class="stud left"></span><span class="stud right"></span>a</span>
+          <span class="cube md sun floaty" style="animation-delay: 0.2s;"><span class="stud left"></span><span class="stud right"></span>+</span>
+          <span class="cube md b floaty" style="animation-delay: 0.4s;"><span class="stud left"></span><span class="stud right"></span>b</span>
+          <span class="cube md sun floaty" style="animation-delay: 0.6s; font-size: 56px;"><span class="stud left"></span><span class="stud right"></span>=</span>
+          <span class="cube md mint floaty" style="animation-delay: 0.8s;"><span class="stud left"></span><span class="stud right"></span>🎉</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- stars in corners -->
+    <div class="star" style="position: absolute; top: 120px; left: 160px; animation: spin-slow 8s linear infinite;"></div>
+    <div class="star" style="position: absolute; top: 220px; right: 200px; animation: spin-slow 10s linear infinite reverse; width: 60px; height: 60px;"></div>
+    <div class="star" style="position: absolute; bottom: 180px; left: 220px; animation: spin-slow 12s linear infinite; width: 70px; height: 70px;"></div>
+    <div class="star" style="position: absolute; bottom: 140px; right: 180px; animation: spin-slow 9s linear infinite reverse;"></div>
+  </section>
+
+</deck-stage>
+
+<script>
+  // Mount cat mascots
+  document.getElementById('cat-title').innerHTML = CatSVG({ size: 260, mood: 'happy' });
+  document.getElementById('cat-hello').innerHTML = CatSVG({ size: 420, mood: 'happy' });
+  document.getElementById('cat-ab').innerHTML = CatSVG({ size: 140, mood: 'teach' });
+  document.getElementById('cat-check').innerHTML = CatSVG({ size: 140, mood: 'wow' });
+  document.getElementById('cat-bye').innerHTML = CatSVG({ size: 300, mood: 'wow' });
+
+  // ====================================================================
+  // Per-slide click-to-advance animations
+  // Each slide with [data-anim] has .step elements with data-step="N".
+  // Clicking anywhere on the slide reveals the next step.
+  // State is kept per-slide and resets on slide entry.
+  // ====================================================================
+
+  const stage = document.querySelector('deck-stage');
+  const slideState = new WeakMap(); // slide -> current step number
+
+  function setupSlide(slide) {
+    if (slide._animSetup) return;
+    slide._animSetup = true;
+    if (!slide.hasAttribute('data-anim')) return;
+
+    const steps = Array.from(slide.querySelectorAll('.step'));
+    // Group steps by data-step
+    const maxStep = steps.reduce((m, el) => {
+      const n = parseInt(el.dataset.step || '0', 10);
+      return Math.max(m, n);
+    }, 0);
+    slideState.set(slide, 0);
+
+    // Steps with data-step="0" or with .shown class are visible from the start
+    steps.forEach((el) => {
+      const n = parseInt(el.dataset.step || '0', 10);
+      if (n === 0 || el.classList.contains('shown')) {
+        el.classList.add('shown');
+      }
+    });
+
+    slide.addEventListener('click', (e) => {
+      // Ignore clicks on the bottom overlay area (doesn't matter — overlay is in shadow DOM)
+      const cur = slideState.get(slide) || 0;
+      if (cur < maxStep) {
+        const next = cur + 1;
+        slideState.set(slide, next);
+        steps.forEach((el) => {
+          const n = parseInt(el.dataset.step || '0', 10);
+          if (n === next) el.classList.add('shown');
+        });
+        if (next >= maxStep) {
+          // hide the click hint
+          const hint = slide.querySelector('.click-hint');
+          if (hint) hint.classList.add('hide');
+        }
+      }
+    });
+  }
+
+  function resetSlide(slide) {
+    if (!slide.hasAttribute('data-anim')) return;
+    const steps = Array.from(slide.querySelectorAll('.step'));
+    steps.forEach((el) => {
+      const n = parseInt(el.dataset.step || '0', 10);
+      if (n > 0) el.classList.remove('shown');
+    });
+    slideState.set(slide, 0);
+    const hint = slide.querySelector('.click-hint');
+    if (hint) hint.classList.remove('hide');
+  }
+
+  // Wait a tick for slotted elements to be collected
+  requestAnimationFrame(() => {
+    const slides = Array.from(stage.children);
+    slides.forEach(setupSlide);
+    // If Game slide is already active on load, init it
+    const activeSlide = stage.querySelector('[data-deck-active]');
+    if (activeSlide && activeSlide.getAttribute('data-label') === 'Game') {
+      initGame();
+    }
+  });
+
+  stage.addEventListener('slidechange', (e) => {
+    const { slide, previousSlide } = e.detail;
+    if (previousSlide) resetSlide(previousSlide);
+    if (slide) setupSlide(slide);
+    // Init the game on entry
+    if (slide && slide.getAttribute('data-label') === 'Game') {
+      initGame();
+    }
+  });
+
+  // ====================================================================
+  // GAME — 3-question quiz
+  // ====================================================================
+  const GAME_QUESTIONS = [
+    {
+      question: 'Чому дорівнює <span style="color: var(--coral-deep);">(a + b)<sup>2</sup></span>?',
+      options: [
+        { text: 'a² + b²', correct: false },
+        { text: 'a² + 2ab + b²', correct: true },
+        { text: 'a² + ab + b²', correct: false },
+      ],
+      hint: '🎯 Правильно! Два фіолетових кубики «ab» — ось що робить її особливою.',
+      wrong: '🤔 Майже! Подивись на слайд 8 — там було 2 фіолетових кубики «ab» посередині.',
+    },
+    {
+      question: 'Який рядок у трикутнику Паскаля <br>відповідає <span style="color: var(--plum-deep);">(a + b)<sup>3</sup></span>?',
+      options: [
+        { text: '1, 2, 1', correct: false },
+        { text: '1, 3, 3, 1', correct: true },
+        { text: '1, 4, 6, 4, 1', correct: false },
+      ],
+      hint: '🎯 Так! 1, 3, 3, 1 — це числа для третього степеня.',
+      wrong: '🤔 Не зовсім. Пригадай: трикутник росте зверху вниз — 1; 1,1; 1,2,1; 1,3,3,1…',
+    },
+    {
+      question: 'Ньютон придумав цю формулу <br>приблизно у якому віці?',
+      options: [
+        { text: 'У 50 років', correct: false },
+        { text: 'У 22 роки', correct: true },
+        { text: 'У 80 років', correct: false },
+      ],
+      hint: '🎯 Точно! Ньютон був молодим студентом, коли придумав біном. Ти теж можеш!',
+      wrong: '🤔 Ні — він був ще молодим. Подивись слайд про Ньютона ще раз.',
+    },
+  ];
+
+  let gameIdx = 0;
+  let gameScore = 0;
+  let gameStage = null;
+
+  function initGame() {
+    gameIdx = 0;
+    gameScore = 0;
+    gameStage = document.querySelector('section[data-label="Game"]');
+    renderQuestion();
+  }
+
+  function renderQuestion() {
+    if (!gameStage) return;
+    const q = GAME_QUESTIONS[gameIdx];
+    const titleEl = gameStage.querySelector('#game-title');
+    const questionEl = gameStage.querySelector('#game-question');
+    const optionsEl = gameStage.querySelector('#game-options');
+    const feedbackEl = gameStage.querySelector('#game-feedback');
+
+    titleEl.textContent = `Питання ${gameIdx + 1} з ${GAME_QUESTIONS.length}`;
+    questionEl.innerHTML = q.question;
+    feedbackEl.innerHTML = '';
+    optionsEl.innerHTML = '';
+
+    q.options.forEach((opt, i) => {
+      const btn = document.createElement('button');
+      btn.className = 'game-option';
+      btn.innerHTML = `<span class="letter">${String.fromCharCode(65 + i)}</span><span>${opt.text}</span>`;
+      btn.onclick = () => handleAnswer(btn, opt, q, optionsEl, feedbackEl);
+      optionsEl.appendChild(btn);
+    });
+  }
+
+  function handleAnswer(btn, opt, q, optionsEl, feedbackEl) {
+    const allBtns = optionsEl.querySelectorAll('.game-option');
+    allBtns.forEach(b => b.classList.add('disabled'));
+    if (opt.correct) {
+      btn.classList.add('correct');
+      gameScore++;
+      feedbackEl.innerHTML = `<div class="feedback-msg good">${q.hint}</div>` + nextButtonHTML();
+    } else {
+      btn.classList.add('wrong');
+      // highlight correct
+      q.options.forEach((o, i) => {
+        if (o.correct) allBtns[i].classList.add('correct');
+      });
+      feedbackEl.innerHTML = `<div class="feedback-msg bad">${q.wrong}</div>` + nextButtonHTML();
+    }
+    const nextBtn = feedbackEl.querySelector('.next-btn');
+    if (nextBtn) nextBtn.onclick = () => advanceGame();
+  }
+
+  function nextButtonHTML() {
+    const isLast = gameIdx === GAME_QUESTIONS.length - 1;
+    return `<button class="next-btn">${isLast ? 'Результат 🎉' : 'Далі →'}</button>`;
+  }
+
+  function advanceGame() {
+    if (gameIdx < GAME_QUESTIONS.length - 1) {
+      gameIdx++;
+      renderQuestion();
+    } else {
+      showGameResult();
+    }
+  }
+
+  function showGameResult() {
+    const titleEl = gameStage.querySelector('#game-title');
+    const questionEl = gameStage.querySelector('#game-question');
+    const optionsEl = gameStage.querySelector('#game-options');
+    const feedbackEl = gameStage.querySelector('#game-feedback');
+
+    const emoji = gameScore === 3 ? '🏆' : gameScore === 2 ? '⭐' : gameScore === 1 ? '👍' : '🤗';
+    const msg = gameScore === 3 ? 'Ідеально! Ти — справжній математик!'
+              : gameScore === 2 ? 'Чудова робота!'
+              : gameScore === 1 ? 'Добре, не зупиняйся!'
+              : 'Спробуй ще раз — все вийде!';
+
+    titleEl.textContent = 'Результат';
+    questionEl.innerHTML = `<span style="font-size: 140px;">${emoji}</span><br><b style="font-size:60px;">${gameScore} з ${GAME_QUESTIONS.length} правильно</b>`;
+    questionEl.style.textAlign = 'center';
+    optionsEl.innerHTML = `<div style="font-size: 44px; text-align: center; max-width: 1100px; margin-top: 20px;">${msg}</div>`;
+    feedbackEl.innerHTML = `<button class="next-btn" onclick="window.__restartGame()">🔁 Зіграти ще раз</button>`;
+  }
+
+  window.__restartGame = function() {
+    const questionEl = gameStage.querySelector('#game-question');
+    questionEl.style.textAlign = '';
+    initGame();
+  };
+</script>
+
+</body>
+</html>
