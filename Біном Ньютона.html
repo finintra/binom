@@ -666,7 +666,11 @@
     });
 
     slide.addEventListener('click', (e) => {
-      // Ignore clicks on the bottom overlay area (doesn't matter — overlay is in shadow DOM)
+      // Don't advance if clicking inside the game (buttons handle their own clicks)
+      if (slide.getAttribute('data-label') === 'Game') return;
+      // Don't advance if clicking a button/link
+      if (e.target.closest('button, a, .game-option, .next-btn')) return;
+
       const cur = slideState.get(slide) || 0;
       if (cur < maxStep) {
         const next = cur + 1;
@@ -676,11 +680,26 @@
           if (n === next) el.classList.add('shown');
         });
         if (next >= maxStep) {
-          // hide the click hint
           const hint = slide.querySelector('.click-hint');
           if (hint) hint.classList.add('hide');
         }
+      } else {
+        // All steps done — advance to next slide
+        stage.next();
       }
+    });
+  }
+
+  // Click-to-advance for slides WITHOUT data-anim (simple content slides)
+  function setupSimpleClickAdvance(slide) {
+    if (slide._clickAdvanceSetup) return;
+    if (slide.hasAttribute('data-anim')) return;
+    slide._clickAdvanceSetup = true;
+    slide.style.cursor = 'pointer';
+    slide.addEventListener('click', (e) => {
+      if (slide.getAttribute('data-label') === 'Game') return;
+      if (e.target.closest('button, a, .game-option, .next-btn')) return;
+      stage.next();
     });
   }
 
@@ -700,6 +719,7 @@
   requestAnimationFrame(() => {
     const slides = Array.from(stage.children);
     slides.forEach(setupSlide);
+    slides.forEach(setupSimpleClickAdvance);
     // If Game slide is already active on load, init it
     const activeSlide = stage.querySelector('[data-deck-active]');
     if (activeSlide && activeSlide.getAttribute('data-label') === 'Game') {
